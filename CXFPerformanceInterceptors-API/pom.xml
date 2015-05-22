@@ -6,7 +6,7 @@
     <parent>
 		<groupId>org.karthick.performance</groupId>
 		<artifactId>CXFUtils</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>CXFPerformanceInterceptors-API</artifactId>
 	<name>CXFPerformanceInterceptors-API</name>
@@ -66,6 +66,5 @@
 					</configuration>
 					</plugin>
         </plugins>
-        <finalName>ThroughputInterceptor-api</finalName>
     </build>
 </project>

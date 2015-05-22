@@ -32,7 +32,9 @@ public class DefaultReportable implements Reportable {
 	@Override
 	public Number getMedian() {
 		double medianElement;
-		if (getSize() % 2 == 1) {
+		if(getSize() == 1){
+			return getSorted().get(0);
+		}else if (getSize() % 2 == 1) {
 			medianElement = getSorted().get(
 					(int) (Math.ceil(getSize() / 2) - 1));
 		} else {
@@ -44,6 +46,9 @@ public class DefaultReportable implements Reportable {
 
 	@Override
 	public Number getLine90Percent() {
+		if(getSize()==1){
+			return getSorted().get(0);
+		}
 		int line90PercentIndex = (int) (getSize() * 0.9);
 		float fraction = (getSize() * 0.9f) - line90PercentIndex;
 		return (getSorted().get(line90PercentIndex-1)*fraction + (getSorted().get(line90PercentIndex)*(1-fraction)));

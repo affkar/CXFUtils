@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.karthick.performance</groupId>
 		<artifactId>CXFUtils</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>CXFPerformanceInterceptors</artifactId>
 	<name>CXFPerformanceInterceptors</name>
@@ -75,7 +75,7 @@
 							javax.xml.bind, javax.xml.bind.annotation, javax.xml.namespace,
 							javax.xml.soap, javax.xml.ws, javax.xml.ws.handler,
 							javax.xml.ws.handler.soap, org.osgi.service.blueprint,
-							org.w3c.dom,org.apache.cxf.interceptor;version="[2.5.0,2.13.0)",service.interceptor.api;version=1.0-SNAPSHOT,
+							org.w3c.dom,org.apache.cxf.interceptor;version="[2.5.0,2.13.0)",service.interceptor.api;version="1.0.0-SNAPSHOT",
 							org.apache.cxf.message;version="[2.5.0,2.13.0)",
 							org.apache.cxf.phase;version="[2.5.0,2.13.0)",
 							org.apache.cxf.endpoint;version="[2.5.0,2.13.0)",
