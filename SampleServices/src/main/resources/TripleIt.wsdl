@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="TripleIt"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tri="http://www.example.org/schema/TripleIt"
+   xmlns:tns="http://www.example.org/contract/TripleIt"
+   targetNamespace="http://www.example.org/contract/TripleIt">
+   <wsdl:types>
+      <xsd:schema targetNamespace="http://www.example.org/schema/TripleIt">
+         <xsd:element name="TripleItRequest">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="numberToTriple" type="xsd:long"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="TripleItResponse">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="tripledNumber" type="xsd:long" />
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="TripleItRequest">
+      <wsdl:part element="tri:TripleItRequest" name="parameters" />
+   </wsdl:message>
+   <wsdl:message name="TripleItResponse">
+      <wsdl:part element="tri:TripleItResponse" name="parameters" />
+   </wsdl:message>
+   <wsdl:portType name="TripleItPortType">
+      <wsdl:operation name="TripleIt">
+         <wsdl:input message="tns:TripleItRequest" />
+         <wsdl:output message="tns:TripleItResponse" />
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="TripleItBinding" type="tns:TripleItPortType">
+      <soap:binding style="document"
+         transport="http://schemas.xmlsoap.org/soap/http" />
+      <wsdl:operation name="TripleIt">
+         <soap:operation soapAction=""/>
+         <wsdl:input><soap:body use="literal"/></wsdl:input>
+         <wsdl:output><soap:body use="literal"/></wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="TripleItService">
+      <wsdl:port name="TripleItPort" binding="tns:TripleItBinding">
+         <soap:address
+            location="http://localhost:8080/tripleit/services/tripleit"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions> 
+

@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.karthick.performance</groupId>
+		<artifactId>CXFUtils</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>CXFPerformanceInterceptors</artifactId>
+	<name>CXFPerformanceInterceptors</name>
+	<packaging>bundle</packaging>
+
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.karthick.performance</groupId>
+			<artifactId>CXFPerformanceInterceptors-API</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-soap</artifactId>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-codegen-plugin</artifactId>
+				<version>3.0.3</version>
+				<executions>
+					<execution>
+						<configuration>
+							<wsdlOptions>
+								<wsdlOption>
+									<wsdl>
+										${basedir}/src/main/resources/Collator.wsdl
+									</wsdl>
+									<wsdlLocation>classpath:Collator.wsdl</wsdlLocation>
+								</wsdlOption>
+							</wsdlOptions>
+						</configuration>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+					</execution>
+				</executions>
+
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<version>2.3.5</version>
+				<configuration>
+					<instructions>
+						<Import-Package>javax.annotation, javax.jws, javax.jws.soap,
+							javax.xml.bind, javax.xml.bind.annotation, javax.xml.namespace,
+							javax.xml.soap, javax.xml.ws, javax.xml.ws.handler,
+							javax.xml.ws.handler.soap, org.osgi.service.blueprint,
+							org.w3c.dom,org.apache.cxf.interceptor;version="[2.5.0,2.13.0)",service.interceptor.api;version=1.0-SNAPSHOT,
+							org.apache.cxf.message;version="[2.5.0,2.13.0)",
+							org.apache.cxf.phase;version="[2.5.0,2.13.0)",
+							org.apache.cxf.endpoint;version="[2.5.0,2.13.0)",
+							org.apache.cxf.service.model;version="[2.5.0,2.13.0)",
+							org.apache.cxf.io;version="[2.5.0,2.13.0)",
+							org.apache.cxf.common.logging;version="[2.5.0,2.13.0)",
+							org.apache.camel;version="[2.5.0,2.13.0)",
+							org.apache.camel.builder;version="[2.5.0,2.13.0)",
+							org.apache.camel.model;;version="[2.5.0,2.13.0)",
+							org.apache.poi.hssf.usermodel, org.apache.poi.ss.usermodel
+						</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
