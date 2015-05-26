@@ -9,9 +9,11 @@
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
 
-	<service id="InboundPerfInterceptor" interface="service.interceptor.api.InboundPerfPhaseInterceptor" ref="DummyThroughputCalculationInterceptor"/>
-	<service id="OutboundPerfInterceptor" interface="service.interceptor.api.OutboundPerfPhaseInterceptor" ref="DummyThroughputCalculationInterceptor"/>
-	<service id="InboundPayloadSizeInterceptor" interface="service.interceptor.api.InboundPayloadSizePhaseInterceptor" ref="DummyThroughputCalculationInterceptor"/>
-	<bean id="DummyThroughputCalculationInterceptor" class="service.dummyinterceptor.impl.DummyThroughputCalculationInterceptor" />
+	<service id="InboundPerfInterceptor" interface="service.interceptor.api.InboundPerfPhaseInterceptor" ref="DummyThroughputCalculationInterceptor1"/>
+	<service id="OutboundPerfInterceptor" interface="service.interceptor.api.OutboundPerfPhaseInterceptor" ref="DummyThroughputCalculationInterceptor2"/>
+	<service id="InboundPayloadSizeInterceptor" interface="service.interceptor.api.InboundPayloadSizePhaseInterceptor" ref="DummyThroughputCalculationInterceptor3"/>
+	<bean id="DummyThroughputCalculationInterceptor1" class="service.dummyinterceptor.impl.DummyThroughputCalculationInterceptor" />
+	<bean id="DummyThroughputCalculationInterceptor2" class="service.dummyinterceptor.impl.DummyThroughputCalculationInterceptor" />
+	<bean id="DummyThroughputCalculationInterceptor3" class="service.dummyinterceptor.impl.DummyThroughputCalculationInterceptor" />
 
 </blueprint>
