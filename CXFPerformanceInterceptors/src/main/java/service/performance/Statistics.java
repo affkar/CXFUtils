@@ -1,5 +1,6 @@
 package service.performance;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,12 @@ public class Statistics {
 			performanceAndThroughputInfoMap.put(serviceAndOperation, new PerformanceAndThroughputInfo(serviceAndOperation));
 		}
 		return performanceAndThroughputInfoMap.get(serviceAndOperation);
+	}
+	
+	public Collection<ReportablePerformanceAndThroughputInfo> getAllReportableInfo(){
+		Collection<ReportablePerformanceAndThroughputInfo> reportable=new ArrayList<ReportablePerformanceAndThroughputInfo>();
+		reportable.addAll(getAllPerformanceAndThroughputInfo());
+		return reportable;
 	}
 	
 	public Collection<PerformanceAndThroughputInfo> getAllPerformanceAndThroughputInfo() {

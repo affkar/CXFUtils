@@ -1,6 +1,7 @@
 package service.performance;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class CollatorDaemon {
@@ -18,6 +19,10 @@ public class CollatorDaemon {
 			logs.add(info.toString());
 		}
 		return logs;
+	}
+	
+	public Collection<ReportablePerformanceAndThroughputInfo> getReportableInfo(){
+		return statistics.getAllReportableInfo();
 	}
 	
 	public void reset(){

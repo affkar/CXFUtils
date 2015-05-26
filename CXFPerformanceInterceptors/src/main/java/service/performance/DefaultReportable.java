@@ -16,41 +16,56 @@ public class DefaultReportable implements Reportable {
 
 	@Override
 	public Number getMinimum() {
+		if(getActualSize()==0){
+			return 0;
+		}
 		return getSorted().get(0);
 	}
 
 	@Override
 	public Number getMaximum() {
-		return getSorted().get(getSize() - 1);
+		if(getActualSize()==0){
+			return 0;
+		}
+		return getSorted().get(getViewableSize() - 1);
 	}
 
 	@Override
 	public Number getAverage() {
-		return getSum() / getSize();
+		if(getActualSize()==0){
+			return 0;
+		}
+		return getSum() / getViewableSize();
 	}
 
 	@Override
 	public Number getMedian() {
 		double medianElement;
-		if(getSize() == 1){
+		if(getActualSize()==0){
+			return 0;
+		}
+		if(getViewableSize() == 1){
 			return getSorted().get(0);
-		}else if (getSize() % 2 == 1) {
+		}else if (getViewableSize() % 2 == 1) {
 			medianElement = getSorted().get(
-					(int) (Math.ceil(getSize() / 2) - 1));
+					(int) (Math.ceil(getViewableSize() / 2) - 1));
 		} else {
-			medianElement = (getSorted().get((getSize() / 2 - 1)) + getSorted()
-					.get(getSize() / 2)) / 2;
+			medianElement = (getSorted().get((getViewableSize() / 2 - 1)) + getSorted()
+					.get(getViewableSize() / 2)) / 2;
 		}
 		return medianElement;
 	}
 
 	@Override
 	public Number getLine90Percent() {
-		if(getSize()==1){
+		if(getActualSize()==0){
+			return 0;
+		}
+		if(getViewableSize()==1){
 			return getSorted().get(0);
 		}
-		int line90PercentIndex = (int) (getSize() * 0.9);
-		float fraction = (getSize() * 0.9f) - line90PercentIndex;
+		int line90PercentIndex = (int) (getViewableSize() * 0.9);
+		float fraction = (getViewableSize() * 0.9f) - line90PercentIndex;
 		return (getSorted().get(line90PercentIndex-1)*fraction + (getSorted().get(line90PercentIndex)*(1-fraction)));
 	}
 
@@ -59,7 +74,7 @@ public class DefaultReportable implements Reportable {
 		return sortedReturnTimes;
 	}
 
-	public int getSize() {
+	public int getViewableSize() {
 		return sortedReturnTimes.size() == 0 ? 1 : sortedReturnTimes.size();
 	}
 
@@ -80,6 +95,10 @@ public class DefaultReportable implements Reportable {
 		return returnTimes;
 	}
 
+	public int getActualSize(){
+		return returnTimes.size();
+	}
+	
 	@Override
 	public String toString() {
 		if (returnTimes.size() == 0) {

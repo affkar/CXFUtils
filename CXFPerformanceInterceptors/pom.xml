@@ -85,7 +85,8 @@
 							org.apache.camel;version="[2.5.0,2.13.0)",
 							org.apache.camel.builder;version="[2.5.0,2.13.0)",
 							org.apache.camel.model;;version="[2.5.0,2.13.0)",
-							org.apache.poi.hssf.usermodel, org.apache.poi.ss.usermodel
+							org.apache.poi.hssf.usermodel, org.apache.poi.ss.usermodel,
+							org.apache.poi.poifs.filesystem, org.apache.poi.ss.util
 						</Import-Package>
 					</instructions>
 				</configuration>
