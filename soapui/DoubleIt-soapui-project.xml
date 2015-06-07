@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="ce7f89b9-a362-40f6-ab9e-b874c6b36098" activeEnvironment="Default" name="DoubleIt" soapui-version="5.1.3" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="4e66a855-eb4e-4094-9dd2-b91f1c08b15f" wsaVersion="NONE" name="TripleItPortTypeSoapBinding" type="wsdl" bindingName="{http://www.example.org/contract/TripleIt}TripleItPortTypeSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/doubleit/services/tripleit?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache/><con:endpoints><con:endpoint>http://localhost:8080/doubleit/services/tripleit</con:endpoint><con:endpoint>http://localhost:8181/cxf/tripleit</con:endpoint></con:endpoints><con:operation id="7308c90d-ea08-4cc5-b470-76848baa08a2" isOneWay="false" action="" name="TripleIt" bindingOperationName="TripleIt" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c37a01c5-2c9d-49c0-b8a1-dde2f3ceb023" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/cxf/tripleit</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:trip="http://www.example.org/schema/TripleIt">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <trip:TripleItRequest>
+         <numberToTriple>1</numberToTriple>
+      </trip:TripleItRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.example.org/contract/TripleIt/TripleItPortType/TripleItRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="faa1419b-0792-4ef5-9f50-ec2b35b6314b" wsaVersion="NONE" name="DoubleItPortTypeSoapBinding" type="wsdl" bindingName="{http://www.example.org/contract/DoubleIt}DoubleItPortTypeSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/doubleit/services/doubleit?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/doubleit/services/doubleit?wsdl"><con:part><con:url>http://localhost:8080/doubleit/services/doubleit?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="DoubleIt" targetNamespace="http://www.example.org/contract/DoubleIt" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.example.org/contract/DoubleIt" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:di="http://www.example.org/schema/DoubleIt">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/schema/DoubleIt">
+      <xsd:element name="DoubleItRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="numberToDouble" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="DoubleItResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="doubledNumber" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="DoubleItResponse">
+    <wsdl:part element="di:DoubleItResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DoubleItRequest">
+    <wsdl:part element="di:DoubleItRequest" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="DoubleItPortType">
+    <wsdl:operation name="DoubleIt">
+      <wsdl:input message="tns:DoubleItRequest"></wsdl:input>
+      <wsdl:output message="tns:DoubleItResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DoubleItPortTypeSoapBinding" type="tns:DoubleItPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="DoubleIt">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DoubleItBinding" type="tns:DoubleItPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="DoubleIt">
+      <soap:operation soapAction=""/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DoubleItService">
+    <wsdl:port binding="tns:DoubleItBinding" name="DoubleItPort">
+      <soap:address location="http://localhost:8080/doubleit/services/doubleit"/>
+    </wsdl:port>
+  </wsdl:service>
+  <wsdl:service name="DoubleItPortTypeService">
+    <wsdl:port binding="tns:DoubleItPortTypeSoapBinding" name="DoubleItPortTypePort">
+      <soap:address location="http://localhost:8080/doubleit/services/doubleit"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/doubleit/services/doubleit</con:endpoint><con:endpoint>http://localhost:8181/doubleit/services/doubleit</con:endpoint></con:endpoints><con:operation id="b07c08bb-ec43-46ec-9e8e-4b391687e216" isOneWay="false" action="" name="DoubleIt" bindingOperationName="DoubleIt" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="60ceb4a3-ada4-457c-8293-aae08481c6ac" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/cxf/doubleit</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:doub="http://www.example.org/schema/DoubleIt">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <doub:DoubleItRequest>
+         <numberToDouble>1</numberToDouble>
+      </doub:DoubleItRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.example.org/contract/DoubleIt/DoubleItPortType/DoubleItRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="af90703e-308a-4dab-913f-243d2e4de01a" wsaVersion="NONE" name="CollatorBinding" type="wsdl" bindingName="{http://www.example.org/contract/Collator}CollatorBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8181/cxf/collator?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8181/cxf/collator?wsdl"><con:part><con:url>http://localhost:8181/cxf/collator?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="Collator" targetNamespace="http://www.example.org/contract/Collator" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tri="http://www.example.org/schema/Collator" xmlns:tns="http://www.example.org/contract/Collator" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/schema/Collator">
+      <xsd:element name="GetLogsRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="AndReset" type="xsd:boolean"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetLogsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="1" name="logs" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ProduceExcelRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="ExcelIdentifier" type="xsd:string"/>
+            <xsd:element name="AndReset" type="xsd:boolean"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ProduceExcelResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="success" type="xsd:boolean"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ProduceExcelRequest">
+    <wsdl:part element="tri:ProduceExcelRequest" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetLogsResponse">
+    <wsdl:part element="tri:GetLogsResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetLogsRequest">
+    <wsdl:part element="tri:GetLogsRequest" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ProduceExcelResponse">
+    <wsdl:part element="tri:ProduceExcelResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CollatorPortType">
+    <wsdl:operation name="GetLogs">
+      <wsdl:input message="tns:GetLogsRequest"></wsdl:input>
+      <wsdl:output message="tns:GetLogsResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProduceExcel">
+      <wsdl:input message="tns:ProduceExcelRequest"></wsdl:input>
+      <wsdl:output message="tns:ProduceExcelResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CollatorBinding" type="tns:CollatorPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetLogs">
+      <soap:operation soapAction="GetLogs"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProduceExcel">
+      <soap:operation soapAction="ProduceExcel"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CollatorService">
+    <wsdl:port binding="tns:CollatorBinding" name="CollatorPort">
+      <soap:address location="http://localhost:8181/cxf/collator"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8181/cxf/collator</con:endpoint></con:endpoints><con:operation id="2d19dac2-0558-4606-b538-0423b16deac4" isOneWay="false" action="GetLogs" name="GetLogs" bindingOperationName="GetLogs" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c370f8a3-8fbe-41a1-ae3a-219bf8b7620c" name="getLogs"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/cxf/collator</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:col="http://www.example.org/schema/Collator">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <col:GetLogsRequest>
+         <AndReset>false</AndReset>
+      </col:GetLogsRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="GetLogs"/><con:wsrmConfig version="1.2"/></con:call><con:call id="2b44f7f7-c574-4c15-af76-4c0c8247996b" name="getLogsAndReset"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/cxf/collator</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:col="http://www.example.org/schema/Collator">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <col:GetLogsRequest>
+         <AndReset>true</AndReset>
+      </col:GetLogsRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="GetLogs"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="2dcd92e0-770f-44c5-9cf0-a9e8abdcccfd" isOneWay="false" action="ProduceExcel" name="ProduceExcel" bindingOperationName="ProduceExcel" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="5287dd33-a4da-43f6-94dc-1b0d32ee937d" name="ProduceExcel"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/cxf/collator</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:col="http://www.example.org/schema/Collator">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <col:ProduceExcelRequest>
+         <AndReset>false</AndReset>
+      </col:ProduceExcelRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="ProduceExcel"/><con:wsrmConfig version="1.2"/></con:call><con:call id="4560f856-07c4-4412-8f8d-c26a280dfa8b" name="ProduceExcelAndReset"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/cxf/collator</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:col="http://www.example.org/schema/Collator">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <col:ProduceExcelRequest>
+         <AndReset>true</AndReset>
+      </col:ProduceExcelRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="ProduceExcel"/><con:wsrmConfig version="1.2"/></con:call><con:call id="e2d7c4b0-4bb4-425f-a305-3e16e41c6503" name="ProduceExcelWithKeyAndReset"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/cxf/collator</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:col="http://www.example.org/schema/Collator">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <col:ProduceExcelRequest>
+         <ExcelIdentifier>SomeNavigation</ExcelIdentifier>
+         <AndReset>true</AndReset>
+      </col:ProduceExcelRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="ProduceExcel"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="488e95e1-393e-4263-97ef-9f5d333ce277" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="42d2074d-d2a6-41f1-b47f-4ac0ae4457d9" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 1" searchProperties="true"><con:settings/><con:testStep type="request" id="3784b724-ba7f-4c4d-b60a-9224cd9bebc4" name="DoubleIt - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>DoubleItPortTypeSoapBinding</con:interface><con:operation>DoubleIt</con:operation><con:request name="DoubleIt - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="3d88d4f1-89d9-4279-b2bf-6ac08d8a16b4"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/cxf/doubleit</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:doub="http://www.example.org/schema/DoubleIt">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <doub:DoubleItRequest>
+         <numberToDouble>2</numberToDouble>
+      </doub:DoubleItRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="49d5508b-c9d3-4272-805f-e622ed6f9a34" name="SOAP Response"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.example.org/contract/DoubleIt/DoubleItPortType/DoubleItRequest"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" id="6431b4a3-17b2-48f6-bb98-88ecf96a38a3" name="TripleIt - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>TripleItPortTypeSoapBinding</con:interface><con:operation>TripleIt</con:operation><con:request name="TripleIt - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="2453c9be-5bef-4540-996a-dd1fcfa0a4f2"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8181/cxf/tripleit</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:trip="http://www.example.org/schema/TripleIt">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <trip:TripleItRequest>
+         <numberToTriple>1</numberToTriple>
+      </trip:TripleItRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="bbb669f6-21c6-4bab-aa39-4f4ad2663b07" name="SOAP Response"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.example.org/contract/TripleIt/TripleItPortType/TripleItRequest"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:loadTest id="5cb9c4c1-62df-4d8c-8f11-bf64bb5fa4cd" name="LoadTest 1"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>5</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>100</con:testLimit><con:limitType>COUNT_PER_THREAD</con:limitType><con:loadStrategy><con:type>Simple</con:type></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
