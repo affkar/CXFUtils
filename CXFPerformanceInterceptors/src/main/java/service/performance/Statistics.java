@@ -34,8 +34,8 @@ public class Statistics {
 	}
 	
 	
-	public int getCurrentBucket() {
+	public int getCurrentBucket(int bucketInterval) {
 		long current_time = System.currentTimeMillis();
-		return (int) (current_time - startTime) / 10000;
+		return (int) (current_time - startTime) / bucketInterval;
 	}
 }

@@ -29,16 +29,22 @@ public class InboundPerfInterceptor extends AbstractPhaseInterceptor<Message>
 	private Statistics statistics;
 	private CollatorDaemon collatorDaemon;
 	private AtomicInteger messageId;
+	private int bucketInterval=60000;//default
 
 	public InboundPerfInterceptor() {
 		super(Phase.USER_LOGICAL, true);
 		collatorDaemon = CollatorDaemon.getInstance();
 		collatorDaemon.attach(this);
 	}
+	
+	public InboundPerfInterceptor(int bucketInterval) {
+		this();
+		this.bucketInterval=bucketInterval;
+	}
 
 	@Override
 	public void handleMessage(Message message) throws Fault {
-		int bucket = statistics.getCurrentBucket();
+		int bucket = statistics.getCurrentBucket(bucketInterval);
 
 		ServiceAndOperation serviceAndOperation = PerfUtils.extractServiceAndOperation(message);
 		PerformanceAndThroughputInfo performanceAndThroughputInfo = statistics
@@ -70,5 +76,4 @@ public class InboundPerfInterceptor extends AbstractPhaseInterceptor<Message>
 		return statistics;
 	}
 
-	
 }

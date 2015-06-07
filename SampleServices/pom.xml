@@ -60,7 +60,12 @@
 							javax.xml.ws.handler.soap, org.osgi.service.blueprint,
 							org.w3c.dom,org.apache.cxf.interceptor;version="[2.5.0,2.13.0)",service.interceptor.api;version="1.0.0-SNAPSHOT",
 							org.apache.cxf.message;version="[2.5.0,2.13.0)",
-							org.apache.cxf.phase;version="[2.5.0,2.13.0)"
+							org.apache.cxf.phase;version="[2.5.0,2.13.0)",
+							org.apache.cxf.management;version="[2.5.0,2.13.0)",
+							org.apache.cxf.management.jmx;version="[2.5.0,2.13.0)",
+							javax.management,
+							org.apache.cxf.management.counters;version="[2.5.0,2.13.0)",
+							org.apache.cxf.management.interceptor;version="[2.5.0,2.13.0)"
 						</Import-Package>
 					</instructions>
 				</configuration>

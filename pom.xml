@@ -59,6 +59,16 @@
 			    <artifactId>camel-soap</artifactId>
 			    <version>${camel.version}</version>
 			</dependency>
+			<dependency>
+			    <groupId>org.apache.cxf</groupId>
+			    <artifactId>cxf-rt-management</artifactId>
+			    <version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.cxf</groupId>
+			    <artifactId>cxf-core</artifactId>
+			    <version>${cxf.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	

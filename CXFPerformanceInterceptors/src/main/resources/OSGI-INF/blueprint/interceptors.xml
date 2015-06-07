@@ -21,8 +21,12 @@
 	</service>
 
 
+
 	<jaxws:endpoint id="collator" implementor="#collatorImpl"
-		wsdlLocation="Collator.wsdl" address="/collator">
+		wsdlLocation="Collator.wsdl" address="/collator"
+		endpointName="e:CollatorPort"
+		serviceName="e:CollatorService"
+		xmlns:e="http://www.example.org/contract/Collator">
 	</jaxws:endpoint>
 
 	<bean id="collatorImpl" class="service.collator.CollatorPortTypeImpl" />
@@ -35,7 +39,5 @@
 	<bean id="etcfolder" class="java.lang.System" factory-method="getProperty">
 		<argument index="0" value="karaf.etc"></argument>
 	</bean>
-	
-	
 
 </blueprint>

@@ -34,16 +34,22 @@ public class OutboundPerfInterceptor extends AbstractPhaseInterceptor<Message> i
 	private Statistics statistics;
 	protected int limit = 100 * 1024;
 	private static final Logger LOG = LogUtils.getLogger(OutboundPerfInterceptor.class);
+	private int bucketInterval=60000;//default
 	
 	public OutboundPerfInterceptor() {
 		super(Phase.PRE_STREAM, true);
 		collatorDaemon = CollatorDaemon.getInstance();
 		collatorDaemon.attach(this);
 	}
+	
+	public OutboundPerfInterceptor(int bucketInterval) {
+		this();
+		this.bucketInterval=bucketInterval;
+	}
 
 	@Override
 	public void handleMessage(Message message) throws Fault {
-		int bucket = statistics.getCurrentBucket();
+		int bucket = statistics.getCurrentBucket(bucketInterval);
 		ServiceAndOperation serviceAndOperation = PerfUtils.extractServiceAndOperation(message);
 		PerformanceAndThroughputInfo performanceAndThroughputInfo = statistics
 				.getPerformanceAndThroughputInfoFor(serviceAndOperation);

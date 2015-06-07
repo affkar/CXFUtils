@@ -11,8 +11,6 @@
 	<name>CXFPerformanceInterceptors</name>
 	<packaging>bundle</packaging>
 
-
-
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
@@ -44,7 +42,6 @@
 			<plugin>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-codegen-plugin</artifactId>
-				<version>3.0.3</version>
 				<executions>
 					<execution>
 						<configuration>
