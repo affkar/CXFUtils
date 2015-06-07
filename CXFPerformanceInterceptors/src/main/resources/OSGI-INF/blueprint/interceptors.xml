@@ -6,6 +6,7 @@
              http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
+	
 
 	<service id="InboundPerfInterceptor"
 		interface="service.interceptor.api.InboundPerfPhaseInterceptor">
@@ -29,13 +30,15 @@
 		xmlns:e="http://www.example.org/contract/Collator">
 	</jaxws:endpoint>
 
-	<bean id="collatorImpl" class="service.collator.CollatorPortTypeImpl" />
+	<bean id="collatorImpl" class="service.collator.CollatorPortTypeImpl" >
+		<argument index="0" ref="ExcelTransformerBean" />
+	</bean>
+	
 	<bean id="collatorDaemon" class="service.performance.CollatorDaemon"
 		factory-method="getInstance" />
 	<bean id="ExcelTransformerBean" class="service.output.ExcelTransformer">
 		<argument index="0" ref="etcfolder" />
 	</bean>
-
 	<bean id="etcfolder" class="java.lang.System" factory-method="getProperty">
 		<argument index="0" value="karaf.etc"></argument>
 	</bean>

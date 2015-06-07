@@ -10,84 +10,70 @@
       
       
       <xsd:schema targetNamespace="http://www.example.org/schema/Collator">
-      <!--   <xsd:complexType name="Statistics">
-          	<xsd:sequence>
-				<xsd:element name="serviceName" type="xsd:string"/>
-				<xsd:element name="operationName" type="xsd:string"/>
-				<xsd:element name="responseTimesInMs">
-					<xsd:
-				</xsd:element>
-				private Map<Integer, AtomicInteger> requestsIn = new HashMap<Integer, AtomicInteger>();
-	private Map<Integer, AtomicInteger> responsesOut = new HashMap<Integer, AtomicInteger>();
-	private Map<Integer, AtomicInteger> faultout = new HashMap<Integer, AtomicInteger>();
-	private QName serviceName;
-	private QName operationName;
-	private Map<Integer, List<Long>> responseTimesInMs;         	
-         	</xsd:sequence>
-         </xsd:complexType> -->
-         
-         <xsd:element name="PrintLogsRequest">
+         <xsd:element name="GetLogsRequest">
             <xsd:complexType>
                <xsd:sequence>
-                  <xsd:element name="someBoolean" type="xsd:boolean"/>
+                  <xsd:element name="AndReset" type="xsd:boolean"/>
                </xsd:sequence>
             </xsd:complexType>
          </xsd:element>
-         <xsd:element name="PrintLogsResponse">
+         <xsd:element name="GetLogsResponse">
             <xsd:complexType>
                <xsd:sequence>
                   <xsd:element name="logs" type="xsd:string" minOccurs="1"  maxOccurs="unbounded"/>
                </xsd:sequence>
             </xsd:complexType>
          </xsd:element>
-         <xsd:element name="ResetRequest">
+         <xsd:element name="ProduceExcelRequest">
             <xsd:complexType>
                <xsd:sequence>
-                  <xsd:element name="someBoolean" type="xsd:boolean"/>
+               	  <xsd:element name="ExcelIdentifier" type="xsd:string"/>
+                  <xsd:element name="AndReset" type="xsd:boolean"/>
                </xsd:sequence>
             </xsd:complexType>
          </xsd:element>
-         <xsd:element name="ResetResponse">
+         <xsd:element name="ProduceExcelResponse">
             <xsd:complexType>
                <xsd:sequence>
-                  <xsd:element name="someBoolean" type="xsd:boolean" />
+                  <xsd:element name="success" type="xsd:boolean"/>
                </xsd:sequence>
             </xsd:complexType>
          </xsd:element>
       </xsd:schema>
    </wsdl:types>
-   <wsdl:message name="PrintLogsRequest">
-      <wsdl:part element="tri:PrintLogsRequest" name="parameters" />
+   <wsdl:message name="GetLogsRequest">
+      <wsdl:part element="tri:GetLogsRequest" name="parameters" />
    </wsdl:message>
-   <wsdl:message name="PrintLogsResponse">
-      <wsdl:part element="tri:PrintLogsResponse" name="parameters" />
+   <wsdl:message name="GetLogsResponse">
+      <wsdl:part element="tri:GetLogsResponse" name="parameters" />
    </wsdl:message>
-   <wsdl:message name="ResetRequest">
-      <wsdl:part element="tri:ResetRequest" name="parameters" />
+   <wsdl:message name="ProduceExcelRequest">
+      <wsdl:part element="tri:ProduceExcelRequest" name="parameters" />
    </wsdl:message>
-   <wsdl:message name="ResetResponse">
-      <wsdl:part element="tri:ResetResponse" name="parameters" />
+   <wsdl:message name="ProduceExcelResponse">
+      <wsdl:part element="tri:ProduceExcelResponse" name="parameters" />
    </wsdl:message>
+   
    <wsdl:portType name="CollatorPortType">
-      <wsdl:operation name="printLogs">
-         <wsdl:input message="tns:PrintLogsRequest" />
-         <wsdl:output message="tns:PrintLogsResponse" />
+      <wsdl:operation name="GetLogs">
+         <wsdl:input message="tns:GetLogsRequest" />
+         <wsdl:output message="tns:GetLogsResponse" />
       </wsdl:operation>
-      <wsdl:operation name="reset">
-         <wsdl:input message="tns:ResetRequest" />
-         <wsdl:output message="tns:ResetResponse" />
+      <wsdl:operation name="ProduceExcel">
+         <wsdl:input message="tns:ProduceExcelRequest" />
+         <wsdl:output message="tns:ProduceExcelResponse" />
       </wsdl:operation>
    </wsdl:portType>
    <wsdl:binding name="CollatorBinding" type="tns:CollatorPortType">
       <soap:binding style="document"
          transport="http://schemas.xmlsoap.org/soap/http" />
-      <wsdl:operation name="printLogs">
-         <soap:operation soapAction="printLogs"/>
+      <wsdl:operation name="GetLogs">
+         <soap:operation soapAction="GetLogs"/>
          <wsdl:input><soap:body use="literal"/></wsdl:input>
          <wsdl:output><soap:body use="literal"/></wsdl:output>
       </wsdl:operation>
-      <wsdl:operation name="reset">
-         <soap:operation soapAction="reset"/>
+      <wsdl:operation name="ProduceExcel">
+         <soap:operation soapAction="ProduceExcel"/>
          <wsdl:input><soap:body use="literal"/></wsdl:input>
          <wsdl:output><soap:body use="literal"/></wsdl:output>
       </wsdl:operation>

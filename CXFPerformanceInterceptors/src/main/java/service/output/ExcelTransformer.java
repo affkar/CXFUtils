@@ -5,12 +5,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -32,7 +36,11 @@ public class ExcelTransformer {
 		this.workBookDirectory=workBookDirectory;
 	}
 	
-	public void toExcel() throws IOException {
+	public void toExcel() throws IOException{
+		toExcel("");
+	}
+	
+	public void toExcel(String workBookKey) throws IOException {
 
 		FileInputStream fis = new FileInputStream(getSlashed(workBookDirectory)+workBookTemplate);
 		POIFSFileSystem poifs = new POIFSFileSystem(fis);
@@ -67,15 +75,15 @@ public class ExcelTransformer {
 						.nextColumn().getColumnIndex(),
 						entry.getKey().toString(),
 						defaultCellStyle);
-				createCell(sheet1, sequence.getRowIndex(), sequence
+				createNumericCell(sheet1, sequence.getRowIndex(), sequence
 						.nextColumn().getColumnIndex(), entry.getValue()
-						.getRequestsIn().toString(), defaultCellStyle);
-				createCell(sheet1, sequence.getRowIndex(), sequence
+						.getRequestsIn(), defaultCellStyle);
+				createNumericCell(sheet1, sequence.getRowIndex(), sequence
 						.nextColumn().getColumnIndex(), entry.getValue()
-						.getResponsesOut().toString(), defaultCellStyle);
-				createCell(sheet1, sequence.getRowIndex(), sequence
+						.getResponsesOut(), defaultCellStyle);
+				createNumericCell(sheet1, sequence.getRowIndex(), sequence
 						.nextColumn().getColumnIndex(), entry.getValue()
-						.getFaultsOut().toString(), defaultCellStyle);
+						.getFaultsOut(), defaultCellStyle);
 				addReportableCells(defaultCellStyle, sheet1, sequence, entry
 						.getValue().getResponseTimesInMs());
 				addReportableCells(defaultCellStyle, sheet1, sequence, entry
@@ -88,16 +96,15 @@ public class ExcelTransformer {
 						.getValue().getFaultPayloadSizes());
 				sequence.nextRow();
 			}
-
 		}
-
 		fis.close();
-
-		OutputStream fos = new FileOutputStream(new File(getSlashed(workBookDirectory)+workBookPrefix+System.currentTimeMillis()+".xls"));
+		//optimise if needed.
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ss");
+		String outputFile = getSlashed(workBookDirectory)+workBookPrefix+"-"+ workBookKey +"-"+df.format(new Date(System.currentTimeMillis()))+".xls";
+		OutputStream fos = new FileOutputStream(new File(outputFile));
 		wb.write(fos);
 		fos.flush();
 		fos.close();
-
 	}
 
 	private String getSlashed(String workBookDirectory2) {
@@ -117,20 +124,20 @@ public class ExcelTransformer {
 
 	private void addReportableCells(CellStyle defaultCellStyle, Sheet sheet1,
 			CellSequencer sequence, Reportable reportable) {
-		createCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
-				.getColumnIndex(), reportable.getMinimum().toString(),
+		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
+				.getColumnIndex(), reportable.getMinimum(),
 				defaultCellStyle);
-		createCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
-				.getColumnIndex(), reportable.getMedian().toString(),
+		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
+				.getColumnIndex(), reportable.getMedian(),
 				defaultCellStyle);
-		createCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
-				.getColumnIndex(), reportable.getLine90Percent().toString(),
+		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
+				.getColumnIndex(), reportable.getLine90Percent(),
 				defaultCellStyle);
-		createCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
-				.getColumnIndex(), reportable.getMaximum().toString(),
+		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
+				.getColumnIndex(), reportable.getMaximum(),
 				defaultCellStyle);
-		createCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
-				.getColumnIndex(), reportable.getAverage().toString(),
+		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
+				.getColumnIndex(), reportable.getAverage(),
 				defaultCellStyle);
 	}
 
@@ -150,15 +157,17 @@ public class ExcelTransformer {
 				fromColumnIndex, toColumnIndex));
 	}
 
-	public void createCell(Sheet sheet, int rowIndex, int columnIndex,
-			String value) {
-		createCell(sheet, rowIndex, columnIndex, value);
-	}
+	
 
 	public void createCell(Sheet sheet, int rowIndex, int columnIndex,
 			String value, CellStyle cellStyle) {
 		CellUtil.createCell(CellUtil.getRow(rowIndex, sheet), columnIndex,
 				value, cellStyle);
+	}
+	
+	public void createNumericCell(Sheet sheet, int rowIndex, int columnIndex,
+			Number value, CellStyle cellStyle) {
+		CellUtil.getRow(rowIndex, sheet).createCell(columnIndex).setCellValue(value.doubleValue());;
 	}
 	
 	

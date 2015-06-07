@@ -1,29 +1,56 @@
 package service.collator;
 
-import org.example.contract.collator.CollatorPortType;
-import org.example.schema.collator.PrintLogsRequest;
-import org.example.schema.collator.PrintLogsResponse;
-import org.example.schema.collator.ResetRequest;
-import org.example.schema.collator.ResetResponse;
+import java.io.IOException;
 
+import org.apache.cxf.common.util.StringUtils;
+import org.example.contract.collator.CollatorPortType;
+import org.example.schema.collator.GetLogsRequest;
+import org.example.schema.collator.GetLogsResponse;
+import org.example.schema.collator.ProduceExcelRequest;
+import org.example.schema.collator.ProduceExcelResponse;
+
+import service.output.ExcelTransformer;
 import service.performance.CollatorDaemon;
 
 public class CollatorPortTypeImpl implements CollatorPortType{
 
 	private CollatorDaemon collatorDaemon=CollatorDaemon.getInstance();
+	private ExcelTransformer excelTransformer;
 	
-	@Override
-	public ResetResponse reset(ResetRequest parameters) {
-		collatorDaemon.reset();
-		return new ResetResponse();
+	public CollatorPortTypeImpl(ExcelTransformer excelTransformer) {
+		super();
+		this.excelTransformer = excelTransformer;
 	}
 
+
 	@Override
-	public PrintLogsResponse printLogs(PrintLogsRequest parameters) {
+	public GetLogsResponse getLogs(GetLogsRequest parameters) {
 		
-		PrintLogsResponse printLogsResponse = new PrintLogsResponse();
+		GetLogsResponse printLogsResponse = new GetLogsResponse();
 		printLogsResponse.getLogs().addAll(collatorDaemon.log());
+		if(parameters.isAndReset()){
+			collatorDaemon.reset();
+		}
 		return printLogsResponse;
+	}
+
+
+	@Override
+	public ProduceExcelResponse produceExcel(ProduceExcelRequest parameters) {
+		ProduceExcelResponse response=new ProduceExcelResponse();
+		try {
+			if(parameters.getExcelIdentifier()==null || parameters.getExcelIdentifier().equals(""))
+				excelTransformer.toExcel();
+			else
+				excelTransformer.toExcel(parameters.getExcelIdentifier());
+			if(parameters.isAndReset()){
+				collatorDaemon.reset();
+			}
+			response.setSuccess(true);
+		} catch (IOException e) {
+			// success false by default
+		}
+		return response;
 	}
 	
 }
