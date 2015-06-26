@@ -11,6 +11,7 @@
 
 	<properties>
     	<cxf.version>2.7.0.redhat-610379</cxf.version>
+    	<osgi.version>4.2.0</osgi.version>
     	<camel.version>2.12.0.redhat-610379</camel.version>
     	<cxf-codegen.version>3.0.3</cxf-codegen.version>
     	<maven-compiler.version>2.3.2</maven-compiler.version>
@@ -45,6 +46,12 @@
 			    <version>${poi.version}</version>
 			</dependency>
 			<dependency>
+			    <groupId>org.apache.poi</groupId>
+			    <artifactId>poi-ooxml</artifactId>
+			    <version>${poi.version}</version>
+			</dependency>
+			
+			<dependency>
 			    <groupId>org.apache.camel</groupId>
 			    <artifactId>camel-core</artifactId>
 			    <version>${camel.version}</version>
@@ -68,6 +75,11 @@
 			    <groupId>org.apache.cxf</groupId>
 			    <artifactId>cxf-core</artifactId>
 			    <version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.core</artifactId>
+			    <version>${osgi.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -1,5 +1,6 @@
 package service.output;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,14 +13,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import service.performance.CollatorDaemon;
 import service.performance.Reportable;
@@ -27,24 +28,25 @@ import service.performance.ReportablePerformance;
 import service.performance.ReportablePerformanceAndThroughputInfo;
 
 public class ExcelTransformer {
-	
+
 	private String workBookDirectory;
-	private String workBookTemplate = "workbook-template.xls";
+	private String workBookTemplate = "workbook-template.xlsx";
 	private String workBookPrefix = "workbook";
 
 	public ExcelTransformer(String workBookDirectory) {
-		this.workBookDirectory=workBookDirectory;
+		this.workBookDirectory = workBookDirectory;
 	}
-	
-	public void toExcel() throws IOException{
+
+	public void toExcel() throws IOException, InvalidFormatException {
 		toExcel("");
 	}
-	
-	public void toExcel(String workBookKey) throws IOException {
 
-		FileInputStream fis = new FileInputStream(getSlashed(workBookDirectory)+workBookTemplate);
-		POIFSFileSystem poifs = new POIFSFileSystem(fis);
-		Workbook wb = new HSSFWorkbook(poifs);
+	public void toExcel(String workBookKey) throws IOException, InvalidFormatException {
+
+		FileInputStream fis = new FileInputStream(getSlashed(workBookDirectory)
+				+ workBookTemplate);
+		OPCPackage pfk =OPCPackage.open(fis);
+		Workbook wb = new XSSFWorkbook(pfk);
 		CellStyle defaultMergedCellStyle = wb.createCellStyle();
 		defaultMergedCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
 		defaultMergedCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -72,9 +74,8 @@ public class ExcelTransformer {
 								.getServiceAndOperation().getOperation(),
 						defaultCellStyle);
 				createCell(sheet1, sequence.getRowIndex(), sequence
-						.nextColumn().getColumnIndex(),
-						entry.getKey().toString(),
-						defaultCellStyle);
+						.nextColumn().getColumnIndex(), entry.getKey()
+						.toString(), defaultCellStyle);
 				createNumericCell(sheet1, sequence.getRowIndex(), sequence
 						.nextColumn().getColumnIndex(), entry.getValue()
 						.getRequestsIn(), defaultCellStyle);
@@ -94,30 +95,48 @@ public class ExcelTransformer {
 						.getValue().getResponsePayloadSizes());
 				addReportableCells(defaultCellStyle, sheet1, sequence, entry
 						.getValue().getFaultPayloadSizes());
+				for (Iterator iterator2 = entry.getValue().getExchanges()
+						.keySet().iterator(); iterator2.hasNext();) {
+					Integer next=(Integer)iterator2.next();
+					createCell(sheet1, sequence.getRowIndex(), sequence
+							.nextColumn().getColumnIndex(), next.toString(), defaultCellStyle);
+					createCell(sheet1, sequence.getRowIndex(), sequence
+							.nextColumn().getColumnIndex(), entry.getValue()
+							.getExchanges().get(next)
+							.getRequestPayload(), defaultCellStyle);
+					createCell(sheet1, sequence.getRowIndex(), sequence
+							.nextColumn().getColumnIndex(), entry.getValue()
+							.getExchanges().get(next)
+							.getResponsePayload(), defaultCellStyle);
+				}
 				sequence.nextRow();
 			}
 		}
 		fis.close();
-		//optimise if needed.
-		DateFormat df=new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ss");
-		String outputFile = getSlashed(workBookDirectory)+workBookPrefix+"-"+ workBookKey +"-"+df.format(new Date(System.currentTimeMillis()))+".xls";
+		// optimise if needed.
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ss");
+		String outputFile = getSlashed(workBookDirectory) + workBookPrefix
+				+ "-" + workBookKey + "-"
+				+ df.format(new Date(System.currentTimeMillis())) + ".xlsx";
 		OutputStream fos = new FileOutputStream(new File(outputFile));
 		wb.write(fos);
 		fos.flush();
 		fos.close();
+		pfk.close();
 	}
 
 	private String getSlashed(String workBookDirectory2) {
-		if(workBookDirectory2==null || workBookDirectory2.equals("")){
+		if (workBookDirectory2 == null || workBookDirectory2.equals("")) {
 			return "";
-		}else{
-			char lastChar = workBookDirectory2.charAt(workBookDirectory2.length()-1);
-			if(lastChar=='/'){
+		} else {
+			char lastChar = workBookDirectory2.charAt(workBookDirectory2
+					.length() - 1);
+			if (lastChar == '/') {
 				return workBookDirectory2;
-			}else if(lastChar=='\\'){
+			} else if (lastChar == '\\') {
 				return workBookDirectory2;
-			}else{
-				return workBookDirectory2+"/";
+			} else {
+				return workBookDirectory2 + "/";
 			}
 		}
 	}
@@ -125,19 +144,18 @@ public class ExcelTransformer {
 	private void addReportableCells(CellStyle defaultCellStyle, Sheet sheet1,
 			CellSequencer sequence, Reportable reportable) {
 		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
-				.getColumnIndex(), reportable.getMinimum(),
-				defaultCellStyle);
+				.getColumnIndex(), reportable.getMinimum(), defaultCellStyle);
 		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
-				.getColumnIndex(), reportable.getMedian(),
-				defaultCellStyle);
+				.getColumnIndex(), reportable.getMedian(), defaultCellStyle);
 		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
 				.getColumnIndex(), reportable.getLine90Percent(),
 				defaultCellStyle);
 		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
-				.getColumnIndex(), reportable.getMaximum(),
-				defaultCellStyle);
+				.getColumnIndex(), reportable.getMaximum(), defaultCellStyle);
 		createNumericCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
-				.getColumnIndex(), reportable.getAverage(),
+				.getColumnIndex(), reportable.getAverage(), defaultCellStyle);
+		createCell(sheet1, sequence.getRowIndex(), sequence.nextColumn()
+				.getColumnIndex(), reportable.getRawData().toString(),
 				defaultCellStyle);
 	}
 
@@ -157,24 +175,41 @@ public class ExcelTransformer {
 				fromColumnIndex, toColumnIndex));
 	}
 
-	
-
 	public void createCell(Sheet sheet, int rowIndex, int columnIndex,
 			String value, CellStyle cellStyle) {
 		CellUtil.createCell(CellUtil.getRow(rowIndex, sheet), columnIndex,
 				value, cellStyle);
 	}
-	
+
 	public void createNumericCell(Sheet sheet, int rowIndex, int columnIndex,
 			Number value, CellStyle cellStyle) {
-		CellUtil.getRow(rowIndex, sheet).createCell(columnIndex).setCellValue(value.doubleValue());;
+		CellUtil.getRow(rowIndex, sheet).createCell(columnIndex)
+				.setCellValue(value.doubleValue());
+		;
 	}
-	
-	
 
-
-	public static void main(String[] args) throws IOException {
-		new ExcelTransformer("").toExcel();
+	public static void main(String[] args) throws IOException, InvalidFormatException {
+		ExcelTransformer excelGuy = new ExcelTransformer(".");
+		FileInputStream fis = new FileInputStream(excelGuy.workBookTemplate);
+		OPCPackage pfk =OPCPackage.open(fis);
+		Workbook wb = new XSSFWorkbook(pfk);
+		Sheet sheet1 = excelGuy.getOrCreateSheet(wb, "sheet1");
+		for (int i = 2; i < 1000; i++) {
+			for (int j = 0; j < 1000; j++){
+				excelGuy.createCell(sheet1, i, j, Integer.valueOf(j).toString(), null);
+			}
+		};
+		fis.close();
+		// optimise if needed.
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ss");
+		String outputFile = excelGuy.workBookPrefix
+				+ "-" + "" + "-"
+				+ df.format(new Date(System.currentTimeMillis())) + ".xlsx";
+		OutputStream fos = new FileOutputStream(new File(outputFile));
+		wb.write(fos);
+		fos.flush();
+		fos.close();
+		pfk.close();
 	}
 
 }

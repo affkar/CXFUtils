@@ -1,0 +1,61 @@
+org.apache.xmlbeans.impl.schema.SchemaTypeSystemImpl
+
+Trying to import xmlbeans into karaf
+
+<dependency>
+	<groupId>org.apache.servicemix.bundles</groupId>
+	<artifactId>org.apache.servicemix.bundles.xmlbeans</artifactId>
+	<version>2.6.0_2</version>
+</dependency>
+
+install -s mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlbeans/2.6.0_2
+
+Success..
+But
+aused by: java.lang.NoClassDefFoundError: Could not initialize class org.openxmlformats.schemas.spreadsheetml.x2006.main.SstDocument
+
+found to be in 
+grepcode.com/project/repo1.maven.org/maven2/org.apache.poi/ooxml-schemas/
+
+so uninstalling wrap_mvn_org.apache.poi_poi-ooxml-schemas_3.8-beta5_
+and installing 1.1
+
+install -s wrap:mvn:org.apache.poi/ooxml-schemas/1.1/
+
+installed.. success..
+
+But
+Caused by: java.lang.ClassNotFoundException: org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheet not found by org.apache.servicemix.bundles.poi [297]
+
+Oh..But it is already there..
+wrap_mvn_org.apache.poi_ooxml-schemas_1.1_ (302)
+org/openxmlformats/schemas/spreadsheetml/x2006/main/CTSheet$Factory.class
+org/openxmlformats/schemas/spreadsheetml/x2006/main/CTSheet.class
+
+
+so is poi unable to find poi_ooxml-schemas?
+[ 297] [Active     ] [            ] [       ] [   60] Apache ServiceMix :: Bundles :: poi (3.9.0.2)
+[ 300] [Active     ] [            ] [       ] [   60] Apache ServiceMix :: Bundles :: dom4j (1.6.1.5)
+[ 302] [Active     ] [            ] [       ] [   60] wrap_mvn_org.apache.poi_ooxml-schemas_1.1_ (0)
+
+
+JBossFuse:karaf@root> headers 297 | grep org.openxmlformats.schemas.spreadsheetml.x2006.main
+	org.openxmlformats.schemas.spreadsheetml.x2006.main;resolution:=optional,
+			org.openxmlformats.schemas.spreadsheetml.x2006.main,
+			org.openxmlformats.schemas.spreadsheetml.x2006.main,
+			org.openxmlformats.schemas.spreadsheetml.x2006.main,
+			org.openxmlformats.schemas.spreadsheetml.x2006.main,
+		uses:="org.openxmlformats.schemas.spreadsheetml.x2006.main,
+		uses:="org.openxmlformats.schemas.spreadsheetml.x2006.main,
+		uses:="org.openxmlformats.schemas.spreadsheetml.x2006.main,
+	org.apache.poi.xssf.util;uses:=org.openxmlformats.schemas.spreadsheetml.x2006.main;version=3.9,
+
+
+Ok Looks like they would like to use the same package but from 3.9, but in 3.9 CTSheet is not there? ha ha..let's find out..
+
+Options from here
+1) let's uninstall 1.1 and install 3.9.. but I'm afraid, SstDocument might not be there in 3.9. 
+2) uninstall servicemix poi and install normal poi as wrapped.
+3) Have a standalone code that works for more than 256 columns and find dependencies and then try to inject those dependencies.
+
+

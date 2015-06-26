@@ -3,6 +3,7 @@ package service.collator;
 import java.io.IOException;
 
 import org.apache.cxf.common.util.StringUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.example.contract.collator.CollatorPortType;
 import org.example.schema.collator.GetLogsRequest;
 import org.example.schema.collator.GetLogsResponse;
@@ -48,6 +49,8 @@ public class CollatorPortTypeImpl implements CollatorPortType{
 			}
 			response.setSuccess(true);
 		} catch (IOException e) {
+			// success false by default
+		} catch (InvalidFormatException e) {
 			// success false by default
 		}
 		return response;

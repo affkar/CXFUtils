@@ -15,6 +15,7 @@ import org.apache.cxf.phase.Phase;
 import service.interceptor.api.InboundPayloadSizePhaseInterceptor;
 import service.interceptor.api.InboundPerfPhaseInterceptor;
 import service.performance.CollatorDaemon;
+import service.performance.Configuration;
 import service.performance.Controllable;
 import service.performance.PerformanceAndThroughputInfo;
 import service.performance.ServiceAndOperation;
@@ -28,46 +29,47 @@ public class InboundPerfInterceptor extends AbstractPhaseInterceptor<Message>
 	
 	private Statistics statistics;
 	private CollatorDaemon collatorDaemon;
-	private AtomicInteger messageId;
-	private int bucketInterval=60000;//default
+	
+	private  Configuration configuration;
 
-	public InboundPerfInterceptor() {
+	public InboundPerfInterceptor(Configuration configuration) {
 		super(Phase.USER_LOGICAL, true);
 		collatorDaemon = CollatorDaemon.getInstance();
 		collatorDaemon.attach(this);
+		this.configuration=configuration;
 	}
 	
-	public InboundPerfInterceptor(int bucketInterval) {
-		this();
-		this.bucketInterval=bucketInterval;
-	}
 
 	@Override
 	public void handleMessage(Message message) throws Fault {
-		int bucket = statistics.getCurrentBucket(bucketInterval);
-
-		ServiceAndOperation serviceAndOperation = PerfUtils.extractServiceAndOperation(message);
-		PerformanceAndThroughputInfo performanceAndThroughputInfo = statistics
-				.getPerformanceAndThroughputInfoFor(serviceAndOperation);
-		if (! MessageUtils.isOutbound(message)) {
-			addRequestHeaders(message.getExchange());
-			performanceAndThroughputInfo.incrementRequestCount(bucket);
-			performanceAndThroughputInfo
-					.addRequestPayloadSize(
-							bucket,
-							Long.valueOf((Integer) message
-									.getExchange()
-									.get(InboundPayloadSizePhaseInterceptor.INBOUND_PAYLOAD_SIZE)));
+		if(configuration.isPerformanceInterceptorsEnabled()){
+			int bucket = statistics.getCurrentBucket(configuration.getBucketInterval());
+	
+			ServiceAndOperation serviceAndOperation = PerfUtils.extractServiceAndOperation(message);
+			PerformanceAndThroughputInfo performanceAndThroughputInfo = statistics
+					.getPerformanceAndThroughputInfoFor(serviceAndOperation);
+			if (! MessageUtils.isOutbound(message)) {
+				addRequestHeaders(message.getExchange());
+				if(configuration.isRecordCount())
+					performanceAndThroughputInfo.incrementRequestCount(bucket);
+				if(configuration.isRecordPayloadSize())
+					performanceAndThroughputInfo
+						.addRequestPayloadSize(
+								bucket,
+								Long.valueOf((Integer) message
+										.getExchange()
+										.get(InboundPayloadSizePhaseInterceptor.INBOUND_PAYLOAD_SIZE)));
+				if(configuration.isRecordPayload())
+					performanceAndThroughputInfo.getReportablePerformance().get(bucket).getExchanges().put(((Integer)message.getExchange().get("REQUEST_ID")), service.performance.Exchange.getExchange((String)message.getExchange().get("REQUEST")));
+			}
 		}
 	}
 
 	private void addRequestHeaders(Exchange exchange) {
 		exchange.put(REQUESTED_TIME, new Date());
-		exchange.put(REQUEST_ID, messageId.getAndIncrement());
 	}
 
 	public void reset(Statistics statistics) {
-		messageId = new AtomicInteger(1);
 		this.statistics = statistics;
 	}
 

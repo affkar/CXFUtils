@@ -1,5 +1,7 @@
 package service.performance;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Performance implements PerformanceInput, ReportablePerformance{
@@ -12,6 +14,7 @@ public class Performance implements PerformanceInput, ReportablePerformance{
 	private Reportable faultPayloadSizes=ReportableFactory.create();
 	private Reportable responseTimesInMs=ReportableFactory.create();
 	private Reportable faultOutTimesInMs=ReportableFactory.create();
+	private Map<Integer, Exchange> exchanges=new HashMap<Integer, Exchange>();
 	@Override
 	public void incrementRequestsCount() {
 		requestsIn.incrementAndGet();
@@ -79,10 +82,17 @@ public class Performance implements PerformanceInput, ReportablePerformance{
 				+ ", responseTimesInMs=" + responseTimesInMs
 				+ ", faultOutTimesInMs=" + faultOutTimesInMs + "]";
 	}
-	
-	
-	
-	
-	
+	@Override
+	public Map<Integer, Exchange> getExchanges() {
+		return exchanges;
+	}
+	@Override
+	public void addRequestPayload(Integer id, String requestPayload) {
+		exchanges.put(id, Exchange.getExchange(requestPayload));
+	}
+	@Override
+	public void addResponsePayload(Integer id, String responsePayload) {
+		exchanges.get(id).setResponsePayload(responsePayload);
+	}
 	
 }

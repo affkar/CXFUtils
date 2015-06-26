@@ -1,5 +1,6 @@
 package service.performance;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public interface ReportablePerformance {
@@ -10,6 +11,8 @@ public interface ReportablePerformance {
 
 	public AtomicInteger getFaultsOut();
 
+	public Map<Integer, Exchange> getExchanges();
+	
 	public Reportable getRequestPayloadSizes();
 
 	public Reportable getResponsePayloadSizes();

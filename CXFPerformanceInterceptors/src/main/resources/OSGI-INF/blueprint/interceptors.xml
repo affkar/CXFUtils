@@ -6,21 +6,45 @@
              http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
              http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
              ">
-	
+	<cm:property-placeholder persistent-id="org.karthick.performance">
+        <!-- list some properties for this test -->
+        <cm:default-properties>
+			<cm:property name="org.karthick.performance.performanceInterceptorsEnabled" value="true"/>
+			<cm:property name="org.karthick.performance.recordCount" value="true"/>
+			<cm:property name="org.karthick.performance.recordPayload" value="false"/>
+			<cm:property name="org.karthick.performance.recordTimes" value="false"/>
+			<cm:property name="org.karthick.performance.recordPayloadSize" value="false"/>
+			<cm:property name="org.karthick.performance.bucketInterval" value="100000"/>
+        </cm:default-properties>
+    </cm:property-placeholder>	
 
 	<service id="InboundPerfInterceptor"
 		interface="service.interceptor.api.InboundPerfPhaseInterceptor">
-		<bean class="service.interceptor.impl.InboundPerfInterceptor" />
+		<bean class="service.interceptor.impl.InboundPerfInterceptor" >
+			<argument index="0" ref="Configuration"/>
+		</bean>
 	</service>
 	<service id="OutboundPerfInterceptor"
 		interface="service.interceptor.api.OutboundPerfPhaseInterceptor">
-		<bean class="service.interceptor.impl.OutboundPerfInterceptor" />
+		<bean class="service.interceptor.impl.OutboundPerfInterceptor" >
+			<argument index="0" ref="Configuration"/>
+		</bean>
 	</service>
 	<service id="InboundPayloadSizeInterceptor"
 		interface="service.interceptor.api.InboundPayloadSizePhaseInterceptor">
-		<bean class="service.interceptor.impl.InboundPayloadSizeInterceptor" />
+		<bean class="service.interceptor.impl.InboundPayloadSizeInterceptor" >
+			<argument index="0" ref="Configuration"/>
+		</bean>
 	</service>
-
+	<bean id="Configuration" class="service.performance.Configuration" >
+		<argument index="0" ref="blueprintBundleContext"/>
+		<argument index="1" ref="blueprintContainer"/>
+		<property name="recordPayload" value="${org.karthick.performance.recordPayload}"/>
+		<property name="recordTimes" value="${org.karthick.performance.recordTimes}"/>
+		<property name="recordCount" value="${org.karthick.performance.recordCount}"/>
+		<property name="performanceInterceptorsEnabled" value="${org.karthick.performance.performanceInterceptorsEnabled}"/>
+		<property name="recordPayloadSize" value="${org.karthick.performance.recordPayloadSize}"/>
+	</bean>
 
 
 	<jaxws:endpoint id="collator" implementor="#collatorImpl"

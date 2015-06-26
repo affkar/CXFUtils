@@ -17,4 +17,8 @@ public interface PerformanceInput {
 	void addResponsePayloadSize(Long payloadSize);
 
 	void addFaultPayloadSize(Long payloadSize);
+	
+	void addRequestPayload(Integer id, String requestPayload);
+	
+	void addResponsePayload(Integer id, String responsePayload);
 }
