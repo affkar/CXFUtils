@@ -17,6 +17,7 @@
     	<maven-compiler.version>2.3.2</maven-compiler.version>
     	<maven-bundle.version>2.3.5</maven-bundle.version>
     	<poi.version>3.12</poi.version>
+    	<maven-shade.version>2.4</maven-shade.version>
     </properties>
 
    <modules>
@@ -24,6 +25,7 @@
        <module>CXFPerformanceInterceptors-Dummy</module>
        <module>CXFPerformanceInterceptors</module>
        <module>SampleServices</module>
+       <module>poi</module>
    </modules>
 
 
@@ -48,6 +50,11 @@
 			<dependency>
 			    <groupId>org.apache.poi</groupId>
 			    <artifactId>poi-ooxml</artifactId>
+			    <version>${poi.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.apache.poi</groupId>
+			    <artifactId>poi-ooxml-schemas</artifactId>
 			    <version>${poi.version}</version>
 			</dependency>
 			
@@ -115,6 +122,11 @@
 					<groupId>org.apache.cxf</groupId>
 					<artifactId>cxf-codegen-plugin</artifactId>
 					<version>${cxf-codegen.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>${maven-shade.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

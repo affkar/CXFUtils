@@ -1,7 +1,6 @@
 package service.interceptor.impl;
 
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 import org.apache.cxf.common.logging.LogUtils;

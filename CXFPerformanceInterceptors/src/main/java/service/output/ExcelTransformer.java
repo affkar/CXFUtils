@@ -52,9 +52,12 @@ public class ExcelTransformer {
 		defaultMergedCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 		CellStyle defaultCellStyle = wb.createCellStyle();
 
-		Sheet sheet1 = getOrCreateSheet(wb, "sheet1");
-		CellSequencer sequence = new CellSequencer();
+		Sheet statisticsSheet = getOrCreateSheet(wb, "statistics");
+		CellSequencer statisticsSequence = new CellSequencer(2);
 
+		Sheet payloadsSheet = getOrCreateSheet(wb, "payloads");
+		CellSequencer payloadsSequence = new CellSequencer(1);
+		
 		Collection<ReportablePerformanceAndThroughputInfo> info = CollatorDaemon
 				.getInstance().getReportableInfo();
 		for (Iterator iterator = info.iterator(); iterator.hasNext();) {
@@ -63,53 +66,59 @@ public class ExcelTransformer {
 
 			for (Entry<Integer, ReportablePerformance> entry : reportablePerformanceAndThroughputInfo
 					.getReportablePerformance().entrySet()) {
-				createCell(sheet1, sequence.getRowIndex(),
-						sequence.getColumnIndex(),
+				createCell(statisticsSheet, statisticsSequence.getRowIndex(),
+						statisticsSequence.getColumnIndex(),
 						reportablePerformanceAndThroughputInfo
 								.getServiceAndOperation().getService(),
 						defaultCellStyle);
-				createCell(sheet1, sequence.getRowIndex(), sequence
+				createCell(statisticsSheet, statisticsSequence.getRowIndex(), statisticsSequence
 						.nextColumn().getColumnIndex(),
 						reportablePerformanceAndThroughputInfo
 								.getServiceAndOperation().getOperation(),
 						defaultCellStyle);
-				createCell(sheet1, sequence.getRowIndex(), sequence
+				createCell(statisticsSheet, statisticsSequence.getRowIndex(), statisticsSequence
 						.nextColumn().getColumnIndex(), entry.getKey()
 						.toString(), defaultCellStyle);
-				createNumericCell(sheet1, sequence.getRowIndex(), sequence
+				createNumericCell(statisticsSheet, statisticsSequence.getRowIndex(), statisticsSequence
 						.nextColumn().getColumnIndex(), entry.getValue()
 						.getRequestsIn(), defaultCellStyle);
-				createNumericCell(sheet1, sequence.getRowIndex(), sequence
+				createNumericCell(statisticsSheet, statisticsSequence.getRowIndex(), statisticsSequence
 						.nextColumn().getColumnIndex(), entry.getValue()
 						.getResponsesOut(), defaultCellStyle);
-				createNumericCell(sheet1, sequence.getRowIndex(), sequence
+				createNumericCell(statisticsSheet, statisticsSequence.getRowIndex(), statisticsSequence
 						.nextColumn().getColumnIndex(), entry.getValue()
 						.getFaultsOut(), defaultCellStyle);
-				addReportableCells(defaultCellStyle, sheet1, sequence, entry
+				addReportableCells(defaultCellStyle, statisticsSheet, statisticsSequence, entry
 						.getValue().getResponseTimesInMs());
-				addReportableCells(defaultCellStyle, sheet1, sequence, entry
+				addReportableCells(defaultCellStyle, statisticsSheet, statisticsSequence, entry
 						.getValue().getFaultOutTimesInMs());
-				addReportableCells(defaultCellStyle, sheet1, sequence, entry
+				addReportableCells(defaultCellStyle, statisticsSheet, statisticsSequence, entry
 						.getValue().getRequestPayloadSizes());
-				addReportableCells(defaultCellStyle, sheet1, sequence, entry
+				addReportableCells(defaultCellStyle, statisticsSheet, statisticsSequence, entry
 						.getValue().getResponsePayloadSizes());
-				addReportableCells(defaultCellStyle, sheet1, sequence, entry
+				addReportableCells(defaultCellStyle, statisticsSheet, statisticsSequence, entry
 						.getValue().getFaultPayloadSizes());
 				for (Iterator iterator2 = entry.getValue().getExchanges()
 						.keySet().iterator(); iterator2.hasNext();) {
 					Integer next=(Integer)iterator2.next();
-					createCell(sheet1, sequence.getRowIndex(), sequence
-							.nextColumn().getColumnIndex(), next.toString(), defaultCellStyle);
-					createCell(sheet1, sequence.getRowIndex(), sequence
+					createNumericCell(payloadsSheet, payloadsSequence.getRowIndex(), payloadsSequence
+							.getColumnIndex(), next, defaultCellStyle);
+					createCell(payloadsSheet, payloadsSequence.getRowIndex(), payloadsSequence
+							.nextColumn().getColumnIndex(),
+							reportablePerformanceAndThroughputInfo
+									.getServiceAndOperation().getOperation(),
+							defaultCellStyle);
+					createCell(payloadsSheet, payloadsSequence.getRowIndex(), payloadsSequence
 							.nextColumn().getColumnIndex(), entry.getValue()
 							.getExchanges().get(next)
 							.getRequestPayload(), defaultCellStyle);
-					createCell(sheet1, sequence.getRowIndex(), sequence
+					createCell(payloadsSheet, payloadsSequence.getRowIndex(), payloadsSequence
 							.nextColumn().getColumnIndex(), entry.getValue()
 							.getExchanges().get(next)
 							.getResponsePayload(), defaultCellStyle);
+					payloadsSequence.nextRow();
 				}
-				sequence.nextRow();
+				statisticsSequence.nextRow();
 			}
 		}
 		fis.close();
@@ -215,9 +224,13 @@ public class ExcelTransformer {
 }
 
 class CellSequencer {
-	private int rowIndex = 2;
+	private int rowIndex ;
 	private int columnIndex;
 
+	public CellSequencer(int startRowIndex) {
+		rowIndex=startRowIndex;
+	}
+	
 	CellSequencer nextRow() {
 		rowIndex++;
 		columnIndex = 0;

@@ -58,4 +58,40 @@ Options from here
 2) uninstall servicemix poi and install normal poi as wrapped.
 3) Have a standalone code that works for more than 256 columns and find dependencies and then try to inject those dependencies.
 
+Option 3)
+These jars are sufficient. Hence need to be imported into karaf.
+/usr/share/devgroup/.m2/repository/org/apache/poi/poi/3.12/poi-3.12.jar
+/usr/share/devgroup/.m2/repository/commons-codec/commons-codec/1.9/commons-codec-1.9.jar
+/usr/share/devgroup/.m2/repository/org/apache/poi/poi-ooxml/3.12/poi-ooxml-3.12.jar
+/usr/share/devgroup/.m2/repository/org/apache/poi/poi-ooxml-schemas/3.12/poi-ooxml-schemas-3.12.jar
+/usr/share/devgroup/.m2/repository/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar
+/usr/share/devgroup/.m2/repository/stax/stax-api/1.0.1/stax-api-1.0.1.jar
+
+install -s wrap:mvn:org.apache.poi/poi/3.12/
+install -s wrap:mvn:org.apache.poi/poi-ooxml/3.12/
+install -s wrap:mvn:org.apache.poi/poi-ooxml-schemas/3.12/
+install -s wrap:mvn:org.apache.xmlbeans/xmlbeans/2.6.0/
+install -s wrap:mvn:stax/stax-api/1.0.1/
+install -s wrap:mvn:commons-codec/commons-codec/1.9/
+
+
+all installed successfully. let's try invoking.
+
+We still had one of the classes missing. Since the package exists in both poi and poi-ooxml but different classes. The ones in poi are imported, however the ones in poi-ooxml is not imported.
+
+So what I tried next 
+step 1) uninstall poi, poi-ooxml, poi-ooxml-schemas
+step 2) used the maven shade plugin to club poi, poi-ooxml, poi-ooxml-schemas into a single jar file. and installed the file.
+
+org.apache.xmlbeans.impl.schema.SchemaTypeSystemImpl class was not found. and looks like the org.apache.xmlbeans.impl.schema was not added to the Import-Package by wrap, when I installed wth wrap:mvn:the uber jar
+
+>>meanwhile on a side track, I found out why the install -s mvn: was now working, because, I had changed the local repo to /usr/share/devgroup/.m2/repository
+>>changed the following property in org.ops4j.pax.url.mvn.cfg  
+>>org.ops4j.pax.url.mvn.localRepository=/usr/share/devgroup/.m2/repository
+
+>>and then all the install mvn: started working. or in short the maven repo was getting recognised.
+
+Now I will uninstall all the 5 and install the uber-uber-jar(includes stax, etc).
+
+And it worked..hurray!
 
