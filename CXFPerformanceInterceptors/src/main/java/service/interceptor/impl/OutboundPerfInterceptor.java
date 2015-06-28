@@ -146,7 +146,11 @@ public class OutboundPerfInterceptor extends AbstractPhaseInterceptor<Message> i
 					message.getExchange().put(OutboundPayloadSizePhaseInterceptor.OUTBOUND_PAYLOAD_SIZE,
 							cos.getInputStream().available());
 					message.getExchange().get(OutboundPayloadSizePhaseInterceptor.OUTBOUND_PAYLOAD_SIZE);
-					performanceAndThroughputInfo.addResponsePayloadSize(bucket, Long.valueOf(cos.getInputStream().available()));
+					if(MessageUtils.isFault(message)){
+						performanceAndThroughputInfo.addFaultPayloadSize(bucket, Long.valueOf(cos.getInputStream().available()));
+					}else{
+						performanceAndThroughputInfo.addResponsePayloadSize(bucket, Long.valueOf(cos.getInputStream().available()));
+					}
 					StringBuilder stringBuilder=new StringBuilder();
 					if(configuration.isRecordPayload()){
 						String contentType = (String)message.get(Message.CONTENT_TYPE);
