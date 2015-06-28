@@ -51,7 +51,6 @@ public class ExcelTransformer {
 		defaultMergedCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
 		defaultMergedCellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 		CellStyle defaultCellStyle = wb.createCellStyle();
-
 		Sheet statisticsSheet = getOrCreateSheet(wb, "statistics");
 		CellSequencer statisticsSequence = new CellSequencer(2);
 

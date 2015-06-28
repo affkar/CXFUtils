@@ -76,6 +76,7 @@
 				<configuration>
 					<instructions>
 						<Import-Package>javax.annotation, javax.jws, javax.jws.soap,
+							javax.xml.transform, javax.xml.transform.stream,
 							javax.xml.bind, javax.xml.bind.annotation, javax.xml.namespace,
 							javax.xml.soap, javax.xml.ws, javax.xml.ws.handler,
 							javax.xml.ws.handler.soap, org.osgi.service.blueprint,org.osgi.framework,org.osgi.service.blueprint.container,org.osgi.service.cm,

@@ -3,12 +3,19 @@ package service.interceptor.impl;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
 import org.apache.cxf.common.logging.LogUtils;
+import org.apache.cxf.helpers.XMLUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.io.CacheAndWriteOutputStream;
 import org.apache.cxf.io.CachedOutputStream;
@@ -142,9 +149,28 @@ public class OutboundPerfInterceptor extends AbstractPhaseInterceptor<Message> i
 					performanceAndThroughputInfo.addResponsePayloadSize(bucket, Long.valueOf(cos.getInputStream().available()));
 					StringBuilder stringBuilder=new StringBuilder();
 					if(configuration.isRecordPayload()){
-						cos.writeCacheTo(stringBuilder, limit);
+						String contentType = (String)message.get(Message.CONTENT_TYPE);
+						if (configuration.isPrettyLogging() && (contentType != null && contentType.indexOf("xml") >= 0 
+					            && contentType.toLowerCase().indexOf("multipart/related") < 0) && cos.size() > 0) {
+				            Transformer serializer = XMLUtils.newTransformer(2);
+				            // Setup indenting to "pretty print"
+				            serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+				            serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+				            StringWriter swriter = new StringWriter();
+				            serializer.transform(new StreamSource(cos.getInputStream()), new StreamResult(swriter));
+				            String result = swriter.toString();
+				            if (result.length() < limit || limit == -1) {
+				            	stringBuilder.append(swriter.toString());
+				            } else {
+				            	stringBuilder.append(swriter.toString().substring(0, limit));
+				            }
+
+				        } else {
+				        	cos.writeCacheTo(stringBuilder, limit);
+				        }
 						performanceAndThroughputInfo.getReportablePerformance().get(bucket).getExchanges().get(((Integer)message.getExchange().get("REQUEST_ID"))).setResponsePayload(stringBuilder.toString());
-					}
+				   }
 				} catch (Exception ex) {
 					// ignore
 				}

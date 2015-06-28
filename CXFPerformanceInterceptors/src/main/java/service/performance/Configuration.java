@@ -21,6 +21,7 @@ public class Configuration implements ManagedService{
 	private static final String PERFORMANCE_INTERCEPTORS_ENABLED_KEY = CONFIG_PID
 			+ ".performanceInterceptorsEnabled";
 	private static final String BUCKET_INTERVAL_KEY = CONFIG_PID+".bucketInterval";
+	private static final String PRETTY_LOGGING_KEY = CONFIG_PID+".prettyLogging";
 	private boolean recordPayloadSize;
 	private boolean recordPayload;
 	private boolean recordTimes;
@@ -28,6 +29,7 @@ public class Configuration implements ManagedService{
 
 	private boolean recordCount;
 	private boolean performanceInterceptorsEnabled;
+	private boolean prettyLogging;
 //	private BundleContext blueprintBundleContext;
 //	private BlueprintContainer blueprintContainer;
 	private Hashtable defaults = new Hashtable() {
@@ -38,6 +40,7 @@ public class Configuration implements ManagedService{
 			put(RECORD_PAYLOAD_SIZE_KEY, false);
 			put(RECORD_PAYLOAD_KEY, false);
 			put(BUCKET_INTERVAL_KEY, false);
+			put(PRETTY_LOGGING_KEY, false);
 		}
 	};
 
@@ -68,6 +71,7 @@ public class Configuration implements ManagedService{
 		recordPayloadSize = config.getBoolean(RECORD_PAYLOAD_SIZE_KEY);
 		recordPayload = config.getBoolean(RECORD_PAYLOAD_KEY);
 		bucketInterval = config.getInteger(BUCKET_INTERVAL_KEY);
+		prettyLogging = config.getBoolean(PRETTY_LOGGING_KEY);
 	}
 
 	@Override
@@ -128,6 +132,15 @@ public class Configuration implements ManagedService{
 	}
 
 	
+	public boolean isPrettyLogging() {
+		return prettyLogging;
+	}
+
+	public void setPrettyLogging(boolean prettyLogging) {
+		this.prettyLogging = prettyLogging;
+	}
+
+
 	abstract class MyAbstractDictionary{
 		public abstract Object get(Object key);
 		public Boolean getBoolean(Object key) {

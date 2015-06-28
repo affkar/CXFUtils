@@ -2,12 +2,19 @@ package service.interceptor.impl;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.common.util.StringUtils;
 import org.apache.cxf.helpers.IOUtils;
+import org.apache.cxf.helpers.XMLUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.io.CachedOutputStream;
 import org.apache.cxf.io.DelegatingInputStream;
@@ -57,12 +64,30 @@ public class InboundPayloadSizeInterceptor extends
 							IOUtils.copyAndCloseInput(bis, bos);
 							bos.flush();
 							bis = bos.getInputStream();
+							String contentType = (String)message.get(Message.CONTENT_TYPE);
+							if (configuration.isPrettyLogging() && (contentType != null && contentType.indexOf("xml") >= 0 
+						            && contentType.toLowerCase().indexOf("multipart/related") < 0) && bos.size() > 0) {
+					            Transformer serializer = XMLUtils.newTransformer(2);
+					            // Setup indenting to "pretty print"
+					            serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+					            serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
-							if (StringUtils.isEmpty(encoding)) {
-								bos.writeCacheTo(stringBuilder, limit);
-							} else {
-								bos.writeCacheTo(stringBuilder, encoding, limit);
-							}
+					            StringWriter swriter = new StringWriter();
+					            serializer.transform(new StreamSource(bos.getInputStream()), new StreamResult(swriter));
+					            String result = swriter.toString();
+					            if (result.length() < limit || limit == -1) {
+					            	stringBuilder.append(swriter.toString());
+					            } else {
+					            	stringBuilder.append(swriter.toString().substring(0, limit));
+					            }
+
+					        } else {
+								if (StringUtils.isEmpty(encoding)) {
+									bos.writeCacheTo(stringBuilder, limit);
+								} else {
+									bos.writeCacheTo(stringBuilder, encoding, limit);
+								}
+					        }
 							message.getExchange().put("REQUEST", stringBuilder.toString());
 							
 							bos.close();
@@ -83,7 +108,7 @@ public class InboundPayloadSizeInterceptor extends
 					if (reader != null) {
 						try {
 							LOG.fine("Bummer. It was a reader, not an InputStream content");
-							message.getExchange()
+						message.getExchange()
 									.put("request payload size", 0);
 						} catch (Exception e) {
 							throw new Fault(e);
