@@ -22,6 +22,13 @@
                </xsd:sequence>
             </xsd:complexType>
          </xsd:element>
+         <xsd:element name="TripleItException">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="numberThatCantBeTripled" type="xsd:long" />
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
       </xsd:schema>
    </wsdl:types>
    <wsdl:message name="TripleItRequest">
@@ -30,10 +37,14 @@
    <wsdl:message name="TripleItResponse">
       <wsdl:part element="tri:TripleItResponse" name="parameters" />
    </wsdl:message>
+   <wsdl:message name="TripleItFault">
+      <wsdl:part element="tri:TripleItException" name="parameters" />
+   </wsdl:message>
    <wsdl:portType name="TripleItPortType">
       <wsdl:operation name="TripleIt">
          <wsdl:input message="tns:TripleItRequest" />
          <wsdl:output message="tns:TripleItResponse" />
+         <wsdl:fault name="fault" message="tns:TripleItFault" />
       </wsdl:operation>
    </wsdl:portType>
    <wsdl:binding name="TripleItBinding" type="tns:TripleItPortType">
@@ -43,6 +54,7 @@
          <soap:operation soapAction=""/>
          <wsdl:input><soap:body use="literal"/></wsdl:input>
          <wsdl:output><soap:body use="literal"/></wsdl:output>
+         <wsdl:fault name="fault"><soap:fault name="myfault" use="literal"/></wsdl:fault>
       </wsdl:operation>
    </wsdl:binding>
    <wsdl:service name="TripleItService">

@@ -115,6 +115,10 @@ public class ExcelTransformer {
 							.nextColumn().getColumnIndex(), entry.getValue()
 							.getExchanges().get(next)
 							.getResponsePayload(), defaultCellStyle);
+					createCell(payloadsSheet, payloadsSequence.getRowIndex(), payloadsSequence
+							.nextColumn().getColumnIndex(), entry.getValue()
+							.getExchanges().get(next)
+							.getFaultPayload(), defaultCellStyle);
 					payloadsSequence.nextRow();
 				}
 				statisticsSequence.nextRow();

@@ -20,6 +20,9 @@
 		<cxf-blueprint-core:outInterceptors>
 			<ref component-id="OutboundPerfInterceptor" />
 		</cxf-blueprint-core:outInterceptors>
+		<cxf-blueprint-core:outFaultInterceptors>
+			<ref component-id="OutboundPerfInterceptor" />
+		</cxf-blueprint-core:outFaultInterceptors>
 	</cxf-blueprint-core:bus>
 	
 	<!-- Grab a reference to the current MBeanServer -->

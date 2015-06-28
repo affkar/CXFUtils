@@ -169,7 +169,10 @@ public class OutboundPerfInterceptor extends AbstractPhaseInterceptor<Message> i
 				        } else {
 				        	cos.writeCacheTo(stringBuilder, limit);
 				        }
-						performanceAndThroughputInfo.getReportablePerformance().get(bucket).getExchanges().get(((Integer)message.getExchange().get("REQUEST_ID"))).setResponsePayload(stringBuilder.toString());
+						if(MessageUtils.isFault(message))
+							performanceAndThroughputInfo.getReportablePerformance().get(bucket).getExchanges().get(((Integer)message.getExchange().get("REQUEST_ID"))).setFaultPayload(stringBuilder.toString());
+						else
+							performanceAndThroughputInfo.getReportablePerformance().get(bucket).getExchanges().get(((Integer)message.getExchange().get("REQUEST_ID"))).setResponsePayload(stringBuilder.toString());
 				   }
 				} catch (Exception ex) {
 					// ignore

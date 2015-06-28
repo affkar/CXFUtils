@@ -22,6 +22,13 @@
                </xsd:sequence>
             </xsd:complexType>
          </xsd:element>
+		<xsd:element name="DoubleItException">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="numberThatwasntdoubled" type="xsd:int" />
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
       </xsd:schema>
    </wsdl:types>
    <wsdl:message name="DoubleItRequest">
@@ -30,10 +37,14 @@
    <wsdl:message name="DoubleItResponse">
       <wsdl:part element="di:DoubleItResponse" name="parameters" />
    </wsdl:message>
+   <wsdl:message name="DoubleItFault">
+      <wsdl:part element="di:DoubleItException" name="parameters" />
+   </wsdl:message>
    <wsdl:portType name="DoubleItPortType">
       <wsdl:operation name="DoubleIt">
          <wsdl:input message="tns:DoubleItRequest" />
          <wsdl:output message="tns:DoubleItResponse" />
+         <wsdl:fault name="fault" message="tns:DoubleItFault" />
       </wsdl:operation>
    </wsdl:portType>
    <wsdl:binding name="DoubleItBinding" type="tns:DoubleItPortType">
@@ -43,6 +54,7 @@
          <soap:operation soapAction=""/>
          <wsdl:input><soap:body use="literal"/></wsdl:input>
          <wsdl:output><soap:body use="literal"/></wsdl:output>
+         <wsdl:fault name="fault"><soap:fault name="myfault" use="literal"/></wsdl:fault>
       </wsdl:operation>
    </wsdl:binding>
    <wsdl:service name="DoubleItService">
