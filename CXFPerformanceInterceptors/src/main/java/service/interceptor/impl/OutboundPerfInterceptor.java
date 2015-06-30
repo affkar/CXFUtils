@@ -56,6 +56,7 @@ public class OutboundPerfInterceptor extends AbstractPhaseInterceptor<Message> i
 	@Override
 	public void handleMessage(Message message) throws Fault {
 		if(configuration.isPerformanceInterceptorsEnabled()){
+			if(PerfUtils.amIMakingThisCallAsAClient(message)){
 			int bucket = statistics.getCurrentBucket(configuration.getBucketInterval());
 			ServiceAndOperation serviceAndOperation = PerfUtils.extractServiceAndOperation(message);
 			PerformanceAndThroughputInfo performanceAndThroughputInfo = statistics
@@ -92,6 +93,7 @@ public class OutboundPerfInterceptor extends AbstractPhaseInterceptor<Message> i
 				message.setContent(Writer.class,
 						new PayloadSizeExtractAndWriteWriter(bucket,performanceAndThroughputInfo, message, iowriter, configuration));
 			}
+		}
 		}
 	}
 
