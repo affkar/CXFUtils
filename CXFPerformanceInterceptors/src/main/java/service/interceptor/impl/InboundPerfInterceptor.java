@@ -42,6 +42,7 @@ public class InboundPerfInterceptor extends AbstractPhaseInterceptor<Message>
 	@Override
 	public void handleMessage(Message message) throws Fault {
 		if(configuration.isPerformanceInterceptorsEnabled()){
+			if(PerfUtils.amIMakingThisCallAsAClient(message)){
 			int bucket = statistics.getCurrentBucket(configuration.getBucketInterval());
 	
 			ServiceAndOperation serviceAndOperation = PerfUtils.extractServiceAndOperation(message);
@@ -61,6 +62,7 @@ public class InboundPerfInterceptor extends AbstractPhaseInterceptor<Message>
 				if(configuration.isRecordPayload())
 					performanceAndThroughputInfo.getReportablePerformance().get(bucket).getExchanges().put(((Integer)message.getExchange().get("REQUEST_ID")), service.performance.Exchange.getExchange((String)message.getExchange().get("REQUEST")));
 			}
+		}
 		}
 	}
 
