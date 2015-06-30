@@ -36,5 +36,7 @@ public class PerfUtils {
 				message.getExchange().getBindingOperationInfo()
 						.getOperationInfo().getName().getLocalPart());
 	}
-	
+	public static boolean amIMakingThisCallAsAClient(Message message) {
+		return message.getExchange().get("org.apache.cxf.endpoint.Client") == null;
+	}
 }
