@@ -25,6 +25,7 @@ import org.apache.cxf.phase.Phase;
 import service.interceptor.api.InboundPayloadSizePhaseInterceptor;
 import service.interceptor.api.InboundPerfPhaseInterceptor;
 import service.performance.Configuration;
+import service.utils.PerfUtils;
 
 public class InboundPayloadSizeInterceptor extends
 		AbstractPhaseInterceptor<Message> implements
@@ -44,6 +45,7 @@ public class InboundPayloadSizeInterceptor extends
 	@Override
 	public void handleMessage(Message message) throws Fault {
 		if (configuration.isPerformanceInterceptorsEnabled()) {
+			if(PerfUtils.amIMakingThisCallAsAClient(message)){
 			message.getExchange().put("REQUEST_ID", messageId.getAndIncrement());
 			if (configuration.isRecordPayload() || configuration.isRecordPayloadSize()) {
 				InputStream is = message.getContent(InputStream.class);
@@ -117,6 +119,7 @@ public class InboundPayloadSizeInterceptor extends
 				}
 			}
 		}
+	}
 	}
 
 	
