@@ -15,7 +15,7 @@ public class PerfUtils {
 	private static final Logger LOG = LogUtils.getLogger(PerfUtils.class);
 	
 	public static ServiceAndOperation extractServiceAndOperation(Message message) {
-		if(LOG.getLevel()==Level.FINEST){
+		if (LOG.isLoggable(Level.FINEST)) {
 			LOG.finest("Exchange Properties");
 			for (Iterator<Entry<String, Object>> iterator = message.getExchange()
 					.entrySet().iterator(); iterator.hasNext();) {
