@@ -26,18 +26,18 @@
 	</cxf-blueprint-core:bus>
 	
 	<!-- Grab a reference to the current MBeanServer -->
-<osgi:reference id="mbeanServer" interface="javax.management.MBeanServer"	/>
+<!-- <osgi:reference id="mbeanServer" interface="javax.management.MBeanServer"	/>
  
 <bean id="org.apache.cxf.management.InstrumentationManager"
   class="org.apache.cxf.management.jmx.InstrumentationManagerImpl">
   <property name="bus" ref="cxf" />
   <property name="enabled" value="true" />
-  <!-- Inject the reference to the MBeanServer -->
+  Inject the reference to the MBeanServer
   <property name="server" ref="mbeanServer" />
 </bean>
 
-<!-- Wiring the counter repository -->
+Wiring the counter repository
 <bean id="CounterRepository" class="org.apache.cxf.management.counters.CounterRepository">
     <property name="bus" ref="cxf" />
-</bean>
+</bean> -->
 </blueprint>

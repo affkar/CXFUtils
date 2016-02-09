@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-api</artifactId>
+			<artifactId>cxf-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.karthick.performance</groupId>
@@ -30,9 +30,9 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Import-Package>service.interceptor.api;version=1.0-SNAPSHOT,org.apache.cxf.interceptor;version="[2.5.0,2.13.0)",org.osgi.service.blueprint,
-							org.apache.cxf.message;version="[2.5.0,2.13.0)",
-							org.apache.cxf.phase;version="[2.5.0,2.13.0)"
+						<Import-Package>service.interceptor.api;version=1.0-SNAPSHOT,org.apache.cxf.interceptor;version="[2.7,4.0]",org.osgi.service.blueprint,
+							org.apache.cxf.message;version="[2.7,4.0]",
+							org.apache.cxf.phase;version="[2.7,4.0]"
 						</Import-Package>
 					</instructions>
 				</configuration>

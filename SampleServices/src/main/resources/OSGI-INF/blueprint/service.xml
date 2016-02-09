@@ -14,9 +14,9 @@
       implementor="service.DoubleItPortTypeImpl"
       wsdlLocation="DoubleIt.wsdl"
       address="/doubleit">
-      <jaxws:features>
+      <!-- <jaxws:features>
     <bean class="org.apache.cxf.management.interceptor.ResponseTimeFeature" />
-  </jaxws:features>
+  </jaxws:features> -->
    </jaxws:endpoint>
    
    <jaxws:endpoint 
@@ -24,9 +24,9 @@
       implementor="service.TripleItPortTypeImpl"
       wsdlLocation="TripleIt.wsdl"
       address="/tripleit">
-      <jaxws:features>
+      <!-- <jaxws:features>
     <bean class="org.apache.cxf.management.interceptor.ResponseTimeFeature" />
-  </jaxws:features>
+  </jaxws:features> -->
    </jaxws:endpoint>
 
 </blueprint>	

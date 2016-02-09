@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-api</artifactId>
+			<artifactId>cxf-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.karthick.performance</groupId>
@@ -39,6 +39,10 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
@@ -79,19 +83,21 @@
 							javax.xml.transform, javax.xml.transform.stream,
 							javax.xml.bind, javax.xml.bind.annotation, javax.xml.namespace,
 							javax.xml.soap, javax.xml.ws, javax.xml.ws.handler,
-							javax.xml.ws.handler.soap, org.osgi.service.blueprint,org.osgi.framework,org.osgi.service.blueprint.container,org.osgi.service.cm,
-							org.w3c.dom,org.apache.cxf.interceptor;version="[2.5.0,2.13.0)",service.interceptor.api;version="1.0.0-SNAPSHOT",
-							org.apache.cxf.message;version="[2.5.0,2.13.0)",
-							org.apache.cxf.phase;version="[2.5.0,2.13.0)",
-							org.apache.cxf.endpoint;version="[2.5.0,2.13.0)",
-							org.apache.cxf.service.model;version="[2.5.0,2.13.0)",
-							org.apache.cxf.io;version="[2.5.0,2.13.0)",
-							org.apache.cxf.common.logging;version="[2.5.0,2.13.0)",
-							org.apache.cxf.common.util;version="[2.5.0,2.13.0)",
-							org.apache.cxf.helpers;version="[2.5.0,2.13.0)",
-							org.apache.camel;version="[2.5.0,2.13.0)",
-							org.apache.camel.builder;version="[2.5.0,2.13.0)",
-							org.apache.camel.model;;version="[2.5.0,2.13.0)",
+							javax.xml.ws.handler.soap,javax.xml.stream, org.osgi.service.blueprint,org.osgi.framework,org.osgi.service.blueprint.container,org.osgi.service.cm,
+							org.w3c.dom,org.apache.cxf.interceptor;version="[2.7,4.0]",service.interceptor.api;version="1.0.0-SNAPSHOT",
+							org.apache.cxf.message;version="[2.7,4.0]",
+							org.apache.cxf.phase;version="[2.7,4.0]",
+							org.apache.cxf.endpoint;version="[2.7,4.0]",
+							org.apache.cxf.service.model;version="[2.7,4.0]",
+							org.apache.cxf.io;version="[2.7,4.0]",
+							org.apache.cxf.common.logging;version="[2.7,4.0]",
+							org.apache.cxf.common.util;version="[2.7,4.0]",
+							org.apache.cxf.helpers;version="[2.7,4.0]",
+							org.apache.cxf.staxutils;version="[2.7,4.0]",
+							org.apache.camel;version="[2.7,4.0]",
+							org.apache.camel.builder;version="[2.7,4.0]",
+							org.apache.camel.model;;version="[2.7,4.0]",
+							
 							org.apache.poi.hssf.usermodel, org.apache.poi.ss.usermodel,
 							org.apache.poi.poifs.filesystem, org.apache.poi.ss.util,
 							org.apache.poi.openxml4j.exceptions,org.apache.poi.openxml4j.opc,

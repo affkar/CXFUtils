@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-api</artifactId>
+			<artifactId>cxf-core</artifactId>
 		</dependency>
 	</dependencies>
     <build>
@@ -29,8 +29,8 @@
 					<configuration>
 						<instructions>
 							<Import-Package>
-							org.apache.cxf.message;version="[2.5.0,2.8.0)",
-							org.apache.cxf.phase;version="[2.5.0,2.8.0)"
+							org.apache.cxf.message;version="[2.7,4.0]",
+							org.apache.cxf.phase;version="[2.7,4.0]"
 							</Import-Package>
 							<Export-Package>service.interceptor.api</Export-Package>
 						</instructions>

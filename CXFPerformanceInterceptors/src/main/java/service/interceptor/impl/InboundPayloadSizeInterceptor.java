@@ -6,24 +6,23 @@ import java.io.StringWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.common.util.StringUtils;
 import org.apache.cxf.helpers.IOUtils;
-import org.apache.cxf.helpers.XMLUtils;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.io.CachedOutputStream;
 import org.apache.cxf.io.DelegatingInputStream;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
+import org.apache.cxf.staxutils.PrettyPrintXMLStreamWriter;
+import org.apache.cxf.staxutils.StaxUtils;
 
 import service.interceptor.api.InboundPayloadSizePhaseInterceptor;
-import service.interceptor.api.InboundPerfPhaseInterceptor;
 import service.performance.Configuration;
 import service.utils.PerfUtils;
 
@@ -69,18 +68,23 @@ public class InboundPayloadSizeInterceptor extends
 							String contentType = (String)message.get(Message.CONTENT_TYPE);
 							if (configuration.isPrettyLogging() && (contentType != null && contentType.indexOf("xml") >= 0 
 						            && contentType.toLowerCase().indexOf("multipart/related") < 0) && bos.size() > 0) {
-					            Transformer serializer = XMLUtils.newTransformer(2);
-					            // Setup indenting to "pretty print"
-					            serializer.setOutputProperty(OutputKeys.INDENT, "yes");
-					            serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
 					            StringWriter swriter = new StringWriter();
-					            serializer.transform(new StreamSource(bos.getInputStream()), new StreamResult(swriter));
-					            String result = swriter.toString();
-					            if (result.length() < limit || limit == -1) {
-					            	stringBuilder.append(swriter.toString());
-					            } else {
-					            	stringBuilder.append(swriter.toString().substring(0, limit));
+					            XMLStreamWriter xwriter = StaxUtils.createXMLStreamWriter(swriter);
+					            xwriter=new PrettyPrintXMLStreamWriter(xwriter, 2);
+					            InputStream in = bos.getInputStream();
+					            try {
+					                StaxUtils.copy(new StreamSource(in), xwriter);
+					            } catch (XMLStreamException xse) {
+					                //ignore
+					            } finally {
+					                try {
+					                    xwriter.flush();
+					                    xwriter.close();
+					                } catch (XMLStreamException xse2) {
+					                    //ignore
+					                }
+					                in.close();
 					            }
 
 					        } else {
